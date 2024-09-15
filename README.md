@@ -23,6 +23,8 @@ The project consists of the following components:
 5. **Database**: PostgreSQL database for storing user and exam data.
 
 ## Getting Started Instructions
+* install [ruff](https://docs.astral.sh/ruff/) for formatting and linting ([vscode extention](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff))
+* install [poetry](https://python-poetry.org/) for dependency management in python
 
 ### 1. Clone the repository
 
