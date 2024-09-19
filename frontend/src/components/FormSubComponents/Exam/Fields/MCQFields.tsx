@@ -23,9 +23,10 @@ const MCQFields = ({ index, question }: MCQFieldsProps) => {
   });
 
   useEffect(() => {
-    if (fields.length === 0) {
-      append({ desc: "", correct: false });
-      append({ desc: "", correct: false });
+    if (fields.length < 2) {
+      for (let index = fields.length; index < 2; index++) {
+        append({ desc: "", correct: false });
+      }
     }
   }, [append, fields.length]);
   const descError =
@@ -63,7 +64,7 @@ const MCQFields = ({ index, question }: MCQFieldsProps) => {
         placeholder={`Question ${index + 1} Grade`}
       />
       {gradeError}
-      <div className="flex flex-col gap-2 [&_input]:max-h-[30px] border ">
+      <div className="flex flex-col gap-2 [&_input]:max-h-[30px]">
         <div className="flex justify-between w-1/2">
           <h3 className="text-l font-bold tracking-widest">Choices</h3>
           <button
@@ -83,12 +84,7 @@ const MCQFields = ({ index, question }: MCQFieldsProps) => {
               type="text"
               {...register(`choices.${index}.desc`, {
                 required: true,
-                validate: (value: string) => {
-                  if (fields.length < 2) {
-                    return "At least 2 choices are required";
-                  }
-                  return true;
-                },
+                minLength: 1,
               })}
             />
             <input

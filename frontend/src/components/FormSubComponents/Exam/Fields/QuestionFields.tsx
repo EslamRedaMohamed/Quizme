@@ -10,17 +10,19 @@ interface QuestionFieldsProps {
   };
 }
 
-const QuestionFields = ({ index, question }: QuestionFieldsProps) => {
-  return (
-    <>
-      {question.type === "mcq" && (
-        <MCQFields index={index} question={question} />
-      )}
-      {question.type === "code" && (
-        <CodingFields index={index} watchedQuestions={question} />
-      )}
-    </>
-  );
-};
+const QuestionFields = React.memo(
+  ({ index, question }: QuestionFieldsProps) => {
+    return (
+      <>
+        {question.type === "mcq" && (
+          <MCQFields index={index} question={question} />
+        )}
+        {question.type === "code" && (
+          <CodingFields index={index} watchedQuestions={question} />
+        )}
+      </>
+    );
+  }
+);
 
 export default QuestionFields;

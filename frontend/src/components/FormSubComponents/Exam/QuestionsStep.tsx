@@ -14,6 +14,7 @@ const QuestionsStep = () => {
     control,
     name: "questions",
   });
+
   useEffect(() => {
     if (fields.length === 0) {
       append({
@@ -76,7 +77,7 @@ const QuestionsStep = () => {
       <button
         className="bg-gray-950 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-full transition"
         type="button"
-        onClick={() => append({ text: "" })}
+        onClick={() => append({ desc: "", type: "", grade: "" })}
       >
         Add Question
       </button>

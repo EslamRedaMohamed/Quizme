@@ -10,7 +10,16 @@ interface CodingFieldsProps {
 }
 
 const CodingFields = () => {
-  const { register } = useFormContext();
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext();
+
+  const { fields, append, remove } = useFieldArray({
+    name: "testcasses",
+    control,
+  });
   return <div>CodingFields</div>;
 };
 
