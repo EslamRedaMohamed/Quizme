@@ -1,7 +1,10 @@
 import { useFormContext } from "react-hook-form";
 
 const ParticipantsStep = () => {
-  const { register } = useFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <>
@@ -14,10 +17,17 @@ const ParticipantsStep = () => {
       </p>
       <p className="text-gray-500">Separate multiple emails with a newline</p>
       <p className="text-gray-500">Use * to whitelist everyone</p>
+      <p className="text-gray-500">
+        Note: Only participants who are whitelisted will be able to join the
+        exam
+      </p>
       <textarea
         className="border-2 border-gray-300 rounded p-2 w-full h-40"
         {...register("participants", { required: true, minLength: 1 })}
       ></textarea>
+      {errors.participants && (
+        <p className="text-red-600">This field is required</p>
+      )}
     </>
   );
 };

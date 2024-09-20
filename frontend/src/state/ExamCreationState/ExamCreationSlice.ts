@@ -5,7 +5,7 @@ interface ExamCreationState {
 }
 
 const initialState: ExamCreationState = {
-  step: 2,
+  step: 4,
 };
 
 const ExamCreationSlice = createSlice({

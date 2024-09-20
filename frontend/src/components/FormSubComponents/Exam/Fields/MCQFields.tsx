@@ -3,17 +3,11 @@ import MarkdownViewer from "../../../Viewers/MarkdownViewer";
 import { useEffect } from "react";
 import { QuestionFieldsProps } from "./QuestionFields";
 
-export interface MCQFieldsProps extends QuestionFieldsProps {
-  question: QuestionFieldsProps["question"] & {
-    choices: { desc: string; isCorrect: boolean }[];
-  };
-}
-
-const MCQFields = ({ index, question }: MCQFieldsProps) => {
+const MCQFields = ({ index }: QuestionFieldsProps) => {
   const {
     register,
     control,
-    watch,
+    getValues,
     formState: { errors },
   } = useFormContext();
 
@@ -21,19 +15,12 @@ const MCQFields = ({ index, question }: MCQFieldsProps) => {
     name: `questions.${index}.choices`,
     control,
   });
-  // console.log(question, "question");
-  // console.log(errors, "errors");
-  // console.log(fields, "fields");
-  console.log(watch());
-  console.log("___________");
 
-  // useEffect(() => {
-  //   if (fields.length < 2) {
-  //     for (let index = fields.length; index < 2; index++) {
-  //       append({ desc: "", correct: false });
-  //     }
-  //   }
-  // }, [append, fields.length]);
+  useEffect(() => {
+    if (fields.length < 2) {
+      append({ desc: "", isCorrect: false });
+    }
+  }, [append, fields.length]);
   const descError =
     Array.isArray(errors?.questions) && errors.questions[index]?.desc ? (
       <p className="text-red-600">This field is required</p>
@@ -54,7 +41,7 @@ const MCQFields = ({ index, question }: MCQFieldsProps) => {
           {...register(`questions.${index}.desc`, { required: true })}
           placeholder={`Question ${index + 1} Description`}
         />
-        <MarkdownViewer input={question.desc} />
+        <MarkdownViewer index={index} />
       </div>
       {descError}
       <input
@@ -84,7 +71,7 @@ const MCQFields = ({ index, question }: MCQFieldsProps) => {
           >
             <input
               type="text"
-              {...register(`choices.${cIndex}.desc`, {
+              {...register(`questions.${index}.choices.${cIndex}.desc`, {
                 required: true,
                 minLength: 1,
               })}
@@ -92,9 +79,11 @@ const MCQFields = ({ index, question }: MCQFieldsProps) => {
             <input
               type="checkbox"
               title="Correct Answer"
-              {...register(`choices.${cIndex}.isCorrect`, {
+              {...register(`questions.${index}.choices.${cIndex}.isCorrect`, {
                 validate: (value) =>
-                  question.choices.some((c) => c.isCorrect) &&
+                  getValues(`questions.${index}.choices`).some(
+                    (c: { isCorrect: boolean }) => c.isCorrect
+                  ) &&
                   (value === true || value === false),
               })}
             />

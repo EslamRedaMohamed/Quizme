@@ -32,7 +32,7 @@ const FormNav = ({ step, maxSteps, handleNext, handlePrev }: FormNavProps) => {
       ) : (
         <button
           className="bg-gray-950 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-full transition"
-          onClick={() => alert("BOMBA")}
+          type="submit"
         >
           Confirm
         </button>

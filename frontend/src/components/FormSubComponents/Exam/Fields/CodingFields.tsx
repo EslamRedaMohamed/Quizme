@@ -3,14 +3,7 @@ import { useFormContext, useFieldArray } from "react-hook-form";
 import { QuestionFieldsProps } from "./QuestionFields";
 import MarkdownViewer from "../../../Viewers/MarkdownViewer";
 
-export interface CodingFieldsProps extends QuestionFieldsProps {
-  question: QuestionFieldsProps["question"] & {
-    code: string;
-    testCases: { input: string; output: boolean }[];
-  };
-}
-
-const CodingFields = ({ index, question }: CodingFieldsProps) => {
+const CodingFields = ({ index }: QuestionFieldsProps) => {
   const {
     register,
     control,
@@ -21,11 +14,11 @@ const CodingFields = ({ index, question }: CodingFieldsProps) => {
     control,
   });
 
-  // useEffect(() => {
-  //   if (fields.length === 0) {
-  //     append({ desc: "", correct: false });
-  //   }
-  // }, [append, fields.length]);
+  useEffect(() => {
+    if (fields.length === 0) {
+      append({ input: "", output: "" });
+    }
+  }, [append, fields.length]);
   const descError =
     Array.isArray(errors?.questions) && errors.questions[index]?.desc ? (
       <p className="text-red-600">This field is required</p>
@@ -49,7 +42,7 @@ const CodingFields = ({ index, question }: CodingFieldsProps) => {
           {...register(`questions.${index}.desc`, { required: true })}
           placeholder={`Question ${index + 1} Description`}
         />
-        <MarkdownViewer input={question.desc} />
+        <MarkdownViewer index={index} />
       </div>
       {descError}
       <input
@@ -93,7 +86,7 @@ const CodingFields = ({ index, question }: CodingFieldsProps) => {
               <input
                 type="text"
                 placeholder="Input"
-                {...register(`choices.${tIndex}.input`, {
+                {...register(`questions.${index}.choices.${tIndex}.input`, {
                   required: true,
                   minLength: 1,
                 })}
@@ -101,7 +94,7 @@ const CodingFields = ({ index, question }: CodingFieldsProps) => {
               <input
                 type="text"
                 placeholder="Output"
-                {...register(`choices.${tIndex}.output`, {
+                {...register(`questions.${index}.choices.${tIndex}.output`, {
                   required: true,
                   minLength: 1,
                 })}
