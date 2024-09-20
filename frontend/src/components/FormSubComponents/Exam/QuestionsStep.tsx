@@ -3,13 +3,7 @@ import QuestionFields from "./Fields/QuestionFields";
 import { useEffect } from "react";
 
 const QuestionsStep = () => {
-  const {
-    register,
-    control,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useFormContext(); // Access control from context
+  const { register, control, watch, setValue } = useFormContext(); // Access control from context
   const { fields, append, remove } = useFieldArray({
     control,
     name: "questions",
@@ -21,10 +15,6 @@ const QuestionsStep = () => {
         desc: "",
         type: "",
         grade: "",
-        choices: [
-          { desc: "", correct: false },
-          { desc: "", correct: false },
-        ],
       });
     }
   }, [append, fields.length]);
@@ -49,7 +39,10 @@ const QuestionsStep = () => {
               <option value="code">Code</option>
             </select>
           </div>
-          <QuestionFields index={index} question={watchedQuestions[index]} />
+          <QuestionFields
+            index={index}
+            question={{ ...watchedQuestions[index] }}
+          />
           <div className="flex justify-end">
             <button
               type="button"

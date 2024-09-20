@@ -7,9 +7,9 @@ import { store } from "./state/store.ts";
 import ExamCreationForm from "./forms/ExamCreationForm.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <Provider store={store}>
-      <ExamCreationForm />
-    </Provider>
-  </StrictMode>
+  // <StrictMode>
+  <Provider store={store}>
+    <ExamCreationForm />
+  </Provider>
+  // </StrictMode>
 );

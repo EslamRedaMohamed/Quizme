@@ -1,13 +1,11 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
 import MarkdownViewer from "../../../Viewers/MarkdownViewer";
 import { useEffect } from "react";
+import { QuestionFieldsProps } from "./QuestionFields";
 
-interface MCQFieldsProps {
-  index: number;
-  question: {
-    desc: string;
-    type: string;
-    grade: number;
+export interface MCQFieldsProps extends QuestionFieldsProps {
+  question: QuestionFieldsProps["question"] & {
+    choices: { desc: string; isCorrect: boolean }[];
   };
 }
 
@@ -15,20 +13,27 @@ const MCQFields = ({ index, question }: MCQFieldsProps) => {
   const {
     register,
     control,
+    watch,
     formState: { errors },
   } = useFormContext();
+
   const { fields, append, remove } = useFieldArray({
-    name: `choices`,
+    name: `questions.${index}.choices`,
     control,
   });
+  // console.log(question, "question");
+  // console.log(errors, "errors");
+  // console.log(fields, "fields");
+  console.log(watch());
+  console.log("___________");
 
-  useEffect(() => {
-    if (fields.length < 2) {
-      for (let index = fields.length; index < 2; index++) {
-        append({ desc: "", correct: false });
-      }
-    }
-  }, [append, fields.length]);
+  // useEffect(() => {
+  //   if (fields.length < 2) {
+  //     for (let index = fields.length; index < 2; index++) {
+  //       append({ desc: "", correct: false });
+  //     }
+  //   }
+  // }, [append, fields.length]);
   const descError =
     Array.isArray(errors?.questions) && errors.questions[index]?.desc ? (
       <p className="text-red-600">This field is required</p>
@@ -40,10 +45,7 @@ const MCQFields = ({ index, question }: MCQFieldsProps) => {
         This field is required and must be a number greater than 0
       </p>
     ) : null;
-  const choicesError =
-    Array.isArray(errors?.questions) && errors.questions[index]?.choices
-      ? errors.questions[index].choices.message
-      : null;
+
   return (
     <>
       <div className="flex [&>*]:w-1/2 gap-2 sm:[&>*]:w-full">
@@ -65,7 +67,7 @@ const MCQFields = ({ index, question }: MCQFieldsProps) => {
       />
       {gradeError}
       <div className="flex flex-col gap-2 [&_input]:max-h-[30px]">
-        <div className="flex justify-between w-1/2">
+        <div className="flex justify-between ">
           <h3 className="text-l font-bold tracking-widest">Choices</h3>
           <button
             className="bg-gray-950 hover:bg-gray-500 text-white font-bold py-1 px-2 rounded-md transition text-sm"
@@ -75,14 +77,14 @@ const MCQFields = ({ index, question }: MCQFieldsProps) => {
             Add Choice
           </button>
         </div>
-        {fields.map((item, index) => (
+        {fields.map((item, cIndex) => (
           <div
-            className="flex gap-2 w-1/2 border p-2 rounded items-center"
+            className="flex gap-2 border p-2 rounded items-center"
             key={item.id}
           >
             <input
               type="text"
-              {...register(`choices.${index}.desc`, {
+              {...register(`choices.${cIndex}.desc`, {
                 required: true,
                 minLength: 1,
               })}
@@ -90,18 +92,29 @@ const MCQFields = ({ index, question }: MCQFieldsProps) => {
             <input
               type="checkbox"
               title="Correct Answer"
-              {...register(`choices.${index}.isCorrect`, { required: true })}
+              {...register(`choices.${cIndex}.isCorrect`, {
+                validate: (value) =>
+                  question.choices.some((c) => c.isCorrect) &&
+                  (value === true || value === false),
+              })}
             />
             <button
               className="bg-gray-950 hover:bg-gray-500 text-white font-bold py-1 px-2 rounded-md transition text-sm"
-              onClick={() => remove(index)}
+              onClick={() => remove(cIndex)}
               type="button"
             >
               Remove Choice
             </button>
-            {choicesError && <p className="text-red-600">{choicesError}</p>}
+            {Array.isArray(errors?.questions) &&
+              errors.questions[index]?.choices[cIndex]?.desc && (
+                <p className="text-red-600">This field is required</p>
+              )}
           </div>
         ))}
+        {Array.isArray(errors?.questions) &&
+          errors.questions[index]?.choices[0].isCorrect && (
+            <p className="text-red-600">At least one choice must be correct</p>
+          )}
       </div>
     </>
   );
