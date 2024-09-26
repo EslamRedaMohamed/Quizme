@@ -45,7 +45,7 @@ const LoginForm: React.FC = () => {
       navigate("/profile");
     } catch (error) {
       console.error("Login error:", error);
-      alert("Login failed. Please check your credentials.");
+      toast.error("Login failed. Please check your credentials.");
     }
   };
   return (

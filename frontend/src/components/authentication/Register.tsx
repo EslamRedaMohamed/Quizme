@@ -25,12 +25,12 @@ const RegisterForm: React.FC = () => {
     e.preventDefault();
 
     if (formData.password1 !== formData.password2) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
     if (!formData.termsAccepted) {
-      alert("You must accept the terms of service");
+      toast.error("You must accept the terms of service");
       return;
     }
 
