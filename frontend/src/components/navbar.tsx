@@ -35,7 +35,6 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const { user } = useUserContext();
   const isAuthenticated = user ? true : false;
-  console.log(user);
 
   return (
     <nav className="bg-gray-200 flex flex-col px-4 py-2 sm:px-6 lg:px-8">

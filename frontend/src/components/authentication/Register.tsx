@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../../styles/register.css";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -49,6 +50,7 @@ const RegisterForm: React.FC = () => {
         }
       );
 
+      toast.success("Registration successful");
       console.log("Registration successful", response.data);
     } catch (error) {
       console.error("Error during registration", error);
