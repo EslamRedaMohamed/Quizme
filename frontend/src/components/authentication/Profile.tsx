@@ -10,7 +10,7 @@ const Profile: React.FC = () => {
   const { user, refreshToken, setUserData } = useUserContext();
 
   const navigate = useNavigate();
-  // TODO rewrite this and add profile editing functionalities
+  // TODO add profile editing functionalities
   useEffect(() => {
     if (!user) {
       toast.error("You must be logged in to view this page");
@@ -30,6 +30,7 @@ const Profile: React.FC = () => {
               })
               .then(() => {
                 toast.success("Logged out successfully");
+                // localStorage.clear();
                 localStorage.removeItem("accessToken");
                 localStorage.removeItem("refreshToken");
                 localStorage.removeItem("user");
@@ -39,8 +40,6 @@ const Profile: React.FC = () => {
               .catch((error) => {
                 toast.error(error.response.data.message);
               });
-
-            // window.location.reload();
           }}
         >
           Logout
