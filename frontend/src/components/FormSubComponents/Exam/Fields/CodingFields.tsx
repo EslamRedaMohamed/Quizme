@@ -13,7 +13,6 @@ const CodingFields = ({ index }: QuestionFieldsProps) => {
     name: `questions.${index}.testCases`,
     control,
   });
-  console.log(errors);
 
   useEffect(() => {
     if (fields.length === 0) {
