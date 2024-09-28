@@ -13,7 +13,7 @@ import ReviewStep from "../FormSubComponents/Exam/ReviewStep.tsx";
 import ParticipantsStep from "../FormSubComponents/Exam/ParticipantsStep.tsx";
 import FormNav from "../FormSubComponents/Exam/FormNav.tsx";
 import { useEffect } from "react";
-import { useUserContext } from "../UserContext.tsx";
+import { useUserContext } from "../../../context/UserContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
