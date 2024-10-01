@@ -57,9 +57,9 @@ class MonitorFrame(views.APIView):
         responses={200: "OK"}
     )
     def post(self, request, *args, **kwargs):
-        serializer = CamFrameLogSerializer(data=request.data)
+        attempt_id = self.request.query_params.get("attempt_id")
+        serializer = CamFrameLogSerializer(data={**request.data, "attempt": attempt_id})
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        evaluate_frame(serializer.data['frame'], serializer.data['attempt_id'])
-        print("Frame saved and evaluated")
+        evaluate_frame.delay(request.body, attempt_id)
         return Response('Ok')

@@ -228,7 +228,7 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_WORKER_POOL = 'solo'
 
 MEDIAPIPE_MONITOR_OPTIONS = mp_py.vision.FaceLandmarkerOptions(
-    base_options=mp_py.BaseOptions(model_asset_path=os.getenv("MEDIAPIPE_MODEL_PATH")),
+    base_options=mp_py.BaseOptions(model_asset_path="./monitor_models/face_landmarker_v2_with_blendshapes.task"),
     output_facial_transformation_matrixes=True,
     num_faces=2
 )
