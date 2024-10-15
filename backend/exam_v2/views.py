@@ -18,6 +18,8 @@ from exam_v2.serializers import ExamSerializer2
 from exam_v2.serializers import ExamDurationSerializer
 from exam_v2.tasks import send_exam_invitation_email
 from subscriptions.models import Subscription
+from django.db import transaction
+
 
 
 class ExamViewSet(ModelViewSet):
@@ -117,6 +119,7 @@ class ExamViewSet(ModelViewSet):
         responses={201: ExamSerializer2(), 400: "Bad Request"},
         manual_parameters=[AUTH_SWAGGER_PARAM],
     )
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         duration_minutes = int(request.data['duration'])
         request.data['duration'] = timedelta(minutes=duration_minutes)
