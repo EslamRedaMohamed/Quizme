@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'code_executor',
     'monitor',
+    'subscriptions'
     # 'django_extensions' if DEBUG else '',
 ]
 
