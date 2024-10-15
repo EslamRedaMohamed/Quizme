@@ -17,6 +17,7 @@ from exam.models import Exam
 from exam_v2.serializers import ExamSerializer2
 from exam_v2.serializers import ExamDurationSerializer
 from exam_v2.tasks import send_exam_invitation_email
+from subscriptions.models import Subscription
 
 
 class ExamViewSet(ModelViewSet):
@@ -119,8 +120,25 @@ class ExamViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         duration_minutes = int(request.data['duration'])
         request.data['duration'] = timedelta(minutes=duration_minutes)
+        try:
+            user_subscription = Subscription.objects.get(user=request.user, is_active=True)
+        except Subscription.DoesNotExist:
+            raise PermissionDenied("You don't have an active subscription. Please subscribe to create exams.")
 
-        return super().create(request, *args, **kwargs)
+        user_exam_count = Exam.objects.filter(user_id=request.user).count()
+
+        if user_subscription.plan.exam_limit != 0 and user_exam_count >= user_subscription.plan.exam_limit:
+            raise PermissionDenied("You have reached the exam limit for your subscription plan. Please upgrade to create more exams.")
+
+        response = super().create(request, *args, **kwargs)
+
+        if response.status_code == 201: 
+            user_subscription.exams_created = user_exam_count + 1
+            user_subscription.save()
+
+        return response
+
+        
 
     @swagger_auto_schema(
         tags=['exams', 'v2'],

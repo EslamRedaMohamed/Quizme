@@ -17,6 +17,6 @@ class Subscription(models.Model):
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
-
+    exams_created = models.IntegerField(default=0)
     def __str__(self):
         return f"{self.user.email} - {self.plan.name}"
